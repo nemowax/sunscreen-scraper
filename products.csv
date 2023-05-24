@@ -1,21 +1,2 @@
-Title,brand,price,url,homosalate,propanediol,propylene glycol,mineral,titanium,zinc
-thinksport Safe Sunscreen SPF 50+,thinkbaby thinksport,21.9900,https://well.ca/products/thinksport-safe-sunscreen-spf-50_80577.html,False,False,False,True,False,True
-thinkbaby Safe Sunscreen SPF 50+,thinkbaby thinksport,34.9900,https://well.ca/products/thinkbaby-safe-sunscreen-spf-50_92711.html,False,False,False,True,False,True
-Consonant Skin+Care The Perfect Sunscreen SPF 30,Consonant Skin+Care ,47.9900,https://well.ca/products/consonant-skincare-the-perfect_103533.html,False,False,False,True,True,True
-Green Beaver Natural Mineral Sunscreen Lotion SPF 40,Green Beaver,21.9800,https://well.ca/products/green-beaver-natural-mineral_101555.html,False,False,False,True,True,True
-Green Beaver Natural Mineral Sunscreen Spray for Kids SPF 27,Green Beaver,21.9900,https://well.ca/products/green-beaver-natural-mineral_51902.html,False,False,False,True,False,True
-Green Beaver Natural Mineral Sunscreen Lotion for Kids SPF 40,Green Beaver,21.9800,https://well.ca/products/green-beaver-natural-mineral_101553.html,False,False,False,True,False,True
-Boo Bamboo Baby & Kids Natural Sunscreen with Bamboo Extract SPF 40,Boo Bamboo,24.9900,https://well.ca/products/boo-bamboo-baby-kids-natural_77313.html,False,False,False,True,False,True
-La Roche-Posay Anthelios Mineral Tinted Ultra-Fluid Lotion SPF 50,La Roche-Posay,38.0000,https://well.ca/products/la-roche-posay-anthelios-mineral_155609.html,False,False,False,True,False,True
-Sun Bum The Getaway SPF 30 Set,Sun Bum,39.9800,https://well.ca/products/sun-bum-the-getaway-spf-30-set_132924.html,True,False,True,True,False,True
-Neutrogena Hydroboost Sunscreen SPF30,Neutrogena,20.9900,https://well.ca/products/neutrogena-hydroboost-sunscreen_162633.html,False,False,False,True,False,True
-thinksport Safe Sunscreen SPF 50+,thinkbaby thinksport,34.9900,https://well.ca/products/thinksport-safe-sunscreen-spf-50_103723.html,False,False,False,True,False,True
-thinkbaby Safe Sunscreen SPF 50+,thinkbaby thinksport,21.9900,https://well.ca/products/thinkbaby-safe-sunscreen-spf-50_80576.html,False,False,False,True,False,True
-Coppertone Sunscreen Lotion SPF 50,Coppertone,14.9800,https://well.ca/products/coppertone-sunscreen-lotion-spf-50_198541.html,False,False,False,True,False,True
-Avene Emulsion Sunscreen SPF 50+,Avene,28.9900,https://well.ca/products/avene-emulsion-sunscreen-spf-50_200297.html,False,False,True,True,True,True
-thinksport SPF 50 Sunscreen Value Bundle,thinkbaby thinksport,62.9800,https://well.ca/products/thinksport-spf-50-sunscreen-value_182344.html,False,False,False,True,False,True
-thinkbaby Safe SPF 50 Sunscreen Trio Bundle,thinkbaby thinksport,59.3700,https://well.ca/products/thinkbaby-safe-spf-50-sunscreen-trio_182343.html,False,False,False,True,False,True
-All Good SPF 30 Tinted Sunscreen Lotion,All Good,23.9900,https://well.ca/products/all-good-spf-30-tinted-sunscreen_194620.html,False,False,False,True,False,True
-thinksport Face & Body Sunscreen Bundle,thinkbaby thinksport,41.7800,https://well.ca/products/thinksport-face-body-sunscreen_182354.html,False,False,False,True,False,True
-All Good SPF 30 Kids Sunscreen Lotion,All Good,19.9900,https://well.ca/products/all-good-spf-30-kids-sunscreen_140632.html,False,False,False,True,False,True
-ATTITUDE Mineral Sunscreen Fragrance Free SPF 30,ATTITUDE,29.9900,https://well.ca/products/attitude-mineral-sunscreen-fragrance_162558.html,False,False,False,True,False,True
+Title,brand,price,url,homosalate,homosalate percentage,propanediol,propylene glycol,mineral,titanium,zinc
+Shiseido Clear Sunscreen Stick SPF 50+,Shiseido,40.0000,https://well.ca/products/shiseido-clear-sunscreen-stick-spf_276474.html,True,homosalate percentage,False,False,True,False,True

@@ -1,4 +1,6 @@
+import os
 import csv
+import json
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -21,6 +23,28 @@ for product_element in product_elements:
     url = product_element.find("a")["href"]
     urls.append(url)
 
+print(len(urls))
+def download_html(url, filename):
+    response = requests.get(url)
+    if response.status_code == 200:
+        file_path = os.path.join(folder_path, filename)
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(response.text)
+        print(f"HTML from {url} saved as {filename}")
+    else:
+        print(f"Failed to download HTML from {url}. Status code: {response.status_code}")
+
+
+# Create a subfolder to save the files
+folder_path = 'html_files'
+os.makedirs(folder_path, exist_ok=True)
+
+# Download HTML from each URL and save it into separate files
+for index, url in enumerate(urls):
+    filename = f"html_{index}.html"  # Filename for each URL
+    download_html(url, filename)
+
+
 # SETUP THE PRODUCTS DICTIONARY
 # Write products to a dictionary list
 sunscreen_products = []
@@ -32,6 +56,7 @@ category_headings = {
     "price": "price",
     "url": "url",
     "homosalate": "homosalate",
+    "homosalate_percentage": "homosalate percentage",
     "propanediol": "propanediol",
     "pg": "propylene glycol",
     "mineral": "mineral",
@@ -78,7 +103,7 @@ def scrape_product_page(url):
     #TODO: case handling of ingreidents like Homosalate.
     #homosalate = soup.findAll(string=re.compile('^Homosalate$'))
     homosalate = soup(string=re.compile('homosalate', re.IGNORECASE))
-    propanediol = soup(string=re.compile('propanedio', re.IGNORECASE))
+    propanediol = soup(string=re.compile('propanediol', re.IGNORECASE))
     pg = soup(string=re.compile('propylene glycol', re.IGNORECASE))
     mineral = soup(string=re.compile('mineral', re.IGNORECASE))
     titanium = soup(string=re.compile('titanium', re.IGNORECASE))
@@ -90,6 +115,7 @@ def scrape_product_page(url):
     mineral_flag = False
     titanium_flag = False
     zinc_flag = False
+    homosalate_percentage = 0
 
     #Do I need to declare the variables up above to reference them in the "is None" case?
     # Check to see if key term returns an empty list. aka no references found.
@@ -97,6 +123,10 @@ def scrape_product_page(url):
     if homosalate:
         print("yes true")
         homosalate_flag = True
+        # I don't need to refind the string containing homosalate using soup. I need to extract the string, then parse that string using regex to slice out the substring contatining the perecentage.
+        homosalate_percent = soup(string=re.compile('homosalate', re.IGNORECASE))
+        #'(?<=)homosalate[\w]*%(?=,)'
+        print(homosalate_percent)
     if propanediol:
         propanediol_flag = True
     if pg:
@@ -129,6 +159,7 @@ def scrape_product_page(url):
         "price": price["content"],
         "url": url,
         "homosalate": homosalate_flag,
+        "homosalate_percentage": "homosalate percentage",
         "propanediol": propanediol_flag,
         "pg": pg_flag,
         "mineral": mineral_flag,
@@ -141,12 +172,15 @@ def scrape_product_page(url):
     writeToFile() # writes all to file every pass. Consider refactoring.
 
 
+scrape_product_page("https://well.ca/products/shiseido-clear-sunscreen-stick-spf_276474.html")
 
 # SCRAPE DATA FROM ALL SUNSCREEN PAGES
 # Iterates over only the first 20 elements.
+"""
 for url in urls[:20]:
     scrape_product_page(url)
     print("scraped")
+    """
 
 
 #ERROR HANDLING
@@ -189,8 +223,7 @@ else:
     print(response)
 
 """
-#print the HTML code
-#print(response.text)
+
 
 
 

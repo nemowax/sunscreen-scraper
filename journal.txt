@@ -1,0 +1,3 @@
+JOURNAL TO TRACK PROGRESS
+- Used ChatGPT to come up with html offline download code. Very efficient.
+- Noted, I was only grabbing 60 product elements from the original webpage. Conversion to Selenium or other headless browser necessary to access hidden elements revealed with scroll. Expect 636 product elements.
