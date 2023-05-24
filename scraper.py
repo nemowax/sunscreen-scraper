@@ -4,17 +4,64 @@ import json
 import re
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+
 
 # TODO: Include homosalate percentage
 # TODO: pull ingredients ONLY from ingredients area
+# TODO: refactor for redability, Python naming conventions and comment conventions
+# TODO: revise where webdriver is opened and closed by best coding practices
+
+# SETUP CHROME TO RUN IN HEADLESS MODE
+# Configure Chrome options to run in headless mode
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+# Create a Chrome WebDriver instance
+driver = webdriver.Chrome(options=options)
+
+# Retrieves page source code for dynamic web pages
+def get_page_source(url):
+    # Load the webpage
+    driver.get(url)
+
+    # Access hidden URLs and elements
+    # Example: Click on a "Show More" button and wait for the new content to load
+    #show_more_button = driver.find_element_by_id('show-more-button')
+    #show_more_button.click()
+
+    # Scroll to the bottom of the dynamic webpage
+    # Get the initial height of the page
+    prev_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        # Scroll to the bottom of the page
+        driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+        # Wait a short time for content to load
+        driver.implicitly_wait(10) # seconds
+        # Get the new height of the page
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        # Break the loop if the page height remains unchanged (reached the bottom)
+        if prev_height == new_height:
+            break
+        # Update the previous height
+        prev_height = new_height
+
+    # Retrieve the updated page source with the hidden content
+    html_content = driver.page_source
+    return html_content
 
 # download the HTML document with an HTTP GET request
+# !!! Depreciated with Selenium - for static use only.
 response = requests.get("https://well.ca/searchresult.html?keyword=sunscreen")
 #response = requests.get("https://well.ca/products/shiseido-clear-sunscreen-stick-spf_276474.html")
 #response = requests.get("https://jackheatonlive.com/")
 
 # parse the HTML content of the page listing all products
-soup = BeautifulSoup(response.content, "html.parser")
+page_source = get_page_source("https://well.ca/searchresult.html?keyword=sunscreen")
+soup = BeautifulSoup(page_source, "html.parser")
+#soup = BeautifulSoup(response.content, "html.parser") # !!! Depreciated with Selenium - for static use only.
 
 # Scrape all individual sunscreen product webpage urls from main page.
 product_elements = soup.find_all(class_="grid__item col-md-3 col-sm-4 col-xs-6") #returns a list of elements
@@ -24,6 +71,7 @@ for product_element in product_elements:
     urls.append(url)
 
 print(len(urls))
+# This function works for static pages ONLY
 def download_html(url, filename):
     response = requests.get(url)
     if response.status_code == 200:
@@ -34,7 +82,7 @@ def download_html(url, filename):
     else:
         print(f"Failed to download HTML from {url}. Status code: {response.status_code}")
 
-
+"""
 # Create a subfolder to save the files
 folder_path = 'html_files'
 os.makedirs(folder_path, exist_ok=True)
@@ -43,7 +91,7 @@ os.makedirs(folder_path, exist_ok=True)
 for index, url in enumerate(urls):
     filename = f"html_{index}.html"  # Filename for each URL
     download_html(url, filename)
-
+"""
 
 # SETUP THE PRODUCTS DICTIONARY
 # Write products to a dictionary list
@@ -224,6 +272,8 @@ else:
 
 """
 
+# Quit the WebDriver
+driver.quit()
 
 
 
