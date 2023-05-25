@@ -62,7 +62,6 @@ def get_page_source(url):
 #response = requests.get("https://well.ca/searchresult.html?keyword=sunscreen")
 
 #response = requests.get("https://well.ca/products/shiseido-clear-sunscreen-stick-spf_276474.html")
-#response = requests.get("https://jackheatonlive.com/")
 
 # parse the HTML content of the page listing all products
 #page_source = get_page_source("https://well.ca/searchresult.html?keyword=sunscreen")
@@ -162,6 +161,10 @@ def writeToFile():
     # release the file resources
     csv_file.close()
 
+# Removes "Trending Brands" and "Trending Items" div from soup
+def clean_soup(soup):
+    for div in soup.find_all("div", {'class': 'footer-tob-bar trending-bar'}):
+        div.decompose()
 
 def scrape_product_page(url="", file_path=""):
     #response = requests.get("https://well.ca/products/shiseido-clear-sunscreen-stick-spf_276474.html")
@@ -169,17 +172,17 @@ def scrape_product_page(url="", file_path=""):
         response = requests.get(url)
         # parse the HTML content of the page listing specific product
         soup = BeautifulSoup(response.content, "html.parser")
+        clean_soup(soup)
     elif file_path != "":
         with open(file_path, 'r', encoding='utf-8') as file:
             html_content = file.read() # html content
         soup = BeautifulSoup(html_content, "html.parser")
+        clean_soup(soup)
     else:
         print("No page found.")
         return
 
     # Get the first reference of the word "homosalate" on the page
-    #TODO: case handling of ingreidents like Homosalate.
-    #homosalate = soup.findAll(string=re.compile('^Homosalate$'))
     homosalate = soup(string=re.compile('homosalate', re.IGNORECASE))
     propanediol = soup(string=re.compile('propanediol', re.IGNORECASE))
     pg = soup(string=re.compile('propylene glycol', re.IGNORECASE))
@@ -197,7 +200,8 @@ def scrape_product_page(url="", file_path=""):
 
     #Do I need to declare the variables up above to reference them in the "is None" case?
     # Check to see if key term returns an empty list. aka no references found.
-    # TODO: add non-capitalized case
+    # Error handling: making sure ingredient is present on the page
+    # before trying to access its data
     if homosalate:
         print("yes true")
         # Find all the paragraphs containing the word "homosalate"
@@ -208,7 +212,7 @@ def scrape_product_page(url="", file_path=""):
             soupstring = str(paragraph)
             # Use regex to find the next word ending with "%"
             #match = re.search(r'(?<=Homosalate )\w+%', soupstring)
-            match = re.search(r'Homosalate \d+.\d+', soupstring)
+            match = re.search(r'homosalate \d+.\d+', soupstring, re.IGNORECASE)
             if match:
                 next_word = match.group(0)
                 numbers_and_periods = re.findall(r'\d+\.?\d*', next_word)
@@ -224,12 +228,6 @@ def scrape_product_page(url="", file_path=""):
     if zinc:
         zinc_flag = True
 
-    #if titanium is not None:
-    #    titanium_flag = True
-
-    # TODO: grab product name
-    # TODO: grab product brand
-    # TODO: formating to plain text
     title = soup.find("meta", property = "og:title") # product title
     brand = soup.find("meta", property = "og:brand")
     price = soup.find("meta", property = "og:price:amount")
@@ -237,7 +235,6 @@ def scrape_product_page(url="", file_path=""):
     # Check this
     #volume = soup.find("h5", class = "product-info__subtitle")
 
-    # TODO: Add for loop for multipLe sunscreen products from different pages
     # define a dictionary with the scraped data
     new_sunscreen_product = {
         "title": title["content"],
@@ -286,13 +283,6 @@ try:
 except FileNotFoundError:
     print("No files found in this folder.")
 
-
-
-#ERROR HANDLING
-#print(brand["content"] if brand else "No meta brand given")
-#print(title["content"] if title else "No meta title given")
-#print(price["content"] if price else "No meta price given")
-
 # TODO: grab product webpage
 # TODO: grab product volume (mL)
 
@@ -303,18 +293,6 @@ except FileNotFoundError:
 
 
 # TODO: Fix zinc flag in "Trending Items" section. From: "The Ordinary Niacinamide 10% + Zinc 1%"
-
-
-# Error handling: making sure ingredient is present on the page
-# before trying to access its data
-#if homosalate is not None:
-#    placeholder_string = homosalate["placeholder"]
-
-# Extract only the page text, for parsing ease
-#pageText = soup.getText()
-#print(pageText)
-
-
 
 # if the response is 2xx
 """
