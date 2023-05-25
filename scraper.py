@@ -197,15 +197,22 @@ def scrape_product_page(url="", file_path=""):
 
     #Do I need to declare the variables up above to reference them in the "is None" case?
     # Check to see if key term returns an empty list. aka no references found.
-    # Check to see if key term returns an empty list. aka no references found.
+    # TODO: add non-capitalized case
     if homosalate:
         print("yes true")
         # Find all the paragraphs containing the word "homosalate"
         homosalate_flag = True
-        # I don't need to refind the string containing homosalate using soup. I need to extract the string, then parse that string using regex to slice out the substring contatining the perecentage.
-        homosalate_percent = soup(string=re.compile('homosalate', re.IGNORECASE))
-        #'(?<=)homosalate[\w]*%(?=,)'
-        print(homosalate_percent)
+        paragraphs = soup.find_all(string=re.compile(r'homosalate', re.IGNORECASE))
+        # Loop through the paragraphs and extract the next word ending with "%"
+        for paragraph in paragraphs:
+            soupstring = str(paragraph)
+            # Use regex to find the next word ending with "%"
+            #match = re.search(r'(?<=Homosalate )\w+%', soupstring)
+            match = re.search(r'Homosalate \d+.\d+', soupstring)
+            if match:
+                next_word = match.group(0)
+                numbers_and_periods = re.findall(r'\d+\.?\d*', next_word)
+                homosalate_percentage = float(numbers_and_periods[0])
     if propanediol:
         propanediol_flag = True
     if pg:
@@ -238,7 +245,7 @@ def scrape_product_page(url="", file_path=""):
         "price": price["content"],
         "url": url,
         "homosalate": homosalate_flag,
-        "homosalate_percentage": "homosalate percentage",
+        "homosalate_percentage": homosalate_percentage,
         "propanediol": propanediol_flag,
         "pg": pg_flag,
         "mineral": mineral_flag,
